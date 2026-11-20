@@ -88,7 +88,11 @@ uninstall:
 clean:
 	$(RM) $(OBJS) $(LANGUAGE_NAME).pc lib$(LANGUAGE_NAME).a lib$(LANGUAGE_NAME).$(SOEXT)
 
-test:
+test: test-scanner
 	$(TS) test
 
-.PHONY: all install uninstall clean test
+test-scanner:
+	@binary=$$(mktemp); trap 'rm -f "$$binary"' EXIT HUP INT TERM; \
+	$(CC) $(CPPFLAGS) $(CFLAGS) test/scanner.c $(LDFLAGS) $(LDLIBS) -o "$$binary" && "$$binary"
+
+.PHONY: all install uninstall clean test test-scanner
