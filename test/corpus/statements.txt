@@ -1862,6 +1862,182 @@ if (echo $BASHPID; true); then echo $BASHPID; fi
         (variable_name)))))
 
 ================================================================================
+Multiple variable assignments as command prefix (same line)
+================================================================================
+
+a=1 b=2 cmd arg
+
+--------------------------------------------------------------------------------
+
+(program
+  (command
+    (variable_assignment
+      (variable_name)
+      (number))
+    (variable_assignment
+      (variable_name)
+      (number))
+    (command_name
+      (word))
+    (word)))
+
+================================================================================
+Multiple variable assignments followed by if statement
+================================================================================
+
+a=1 b=2
+if true; then :; fi
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignments
+    (variable_assignment
+      (variable_name)
+      (number))
+    (variable_assignment
+      (variable_name)
+      (number)))
+  (if_statement
+    (command
+      (command_name
+        (word)))
+    (command
+      (command_name
+        (word)))))
+
+================================================================================
+Multiple variable assignments followed by a command on the next line
+================================================================================
+
+a=1 b=2
+true
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignments
+    (variable_assignment
+      (variable_name)
+      (number))
+    (variable_assignment
+      (variable_name)
+      (number)))
+  (command
+    (command_name
+      (word))))
+
+================================================================================
+Multiple variable assignments followed by a command inside a brace group
+================================================================================
+
+{ a=1 b=2
+  true; }
+
+--------------------------------------------------------------------------------
+
+(program
+  (compound_statement
+    (variable_assignments
+      (variable_assignment
+        (variable_name)
+        (number))
+      (variable_assignment
+        (variable_name)
+        (number)))
+    (command
+      (command_name
+        (word)))))
+
+================================================================================
+Assignments before an if statement in an Autoconf-style function
+================================================================================
+
+f() {
+  a=1 b=2
+  if test "$x" = yes; then
+    :
+  else
+    :
+  fi
+}
+
+--------------------------------------------------------------------------------
+
+(program
+  (function_definition
+    (word)
+    (compound_statement
+      (variable_assignments
+        (variable_assignment
+          (variable_name)
+          (number))
+        (variable_assignment
+          (variable_name)
+          (number)))
+      (if_statement
+        (command
+          (command_name
+            (word))
+          (string
+            (simple_expansion
+              (variable_name)))
+          (word)
+          (word))
+        (command
+          (command_name
+            (word)))
+        (else_clause
+          (command
+            (command_name
+              (word))))))))
+
+================================================================================
+Assignments before elif in an Autoconf-style loop
+================================================================================
+
+a= b=
+for x in $list; do
+  if test $b; then
+    a= b=
+  elif test $a; then :; fi
+done
+
+--------------------------------------------------------------------------------
+
+(program
+  (variable_assignments
+    (variable_assignment
+      (variable_name))
+    (variable_assignment
+      (variable_name)))
+  (for_statement
+    (variable_name)
+    (simple_expansion
+      (variable_name))
+    (do_group
+      (if_statement
+        (command
+          (command_name
+            (word))
+          (simple_expansion
+            (variable_name)))
+        (variable_assignments
+          (variable_assignment
+            (variable_name))
+          (variable_assignment
+            (variable_name)))
+        (elif_clause
+          (command
+            (command_name
+              (word))
+            (simple_expansion
+              (variable_name)))
+          (command
+            (command_name
+              (word))))))))
+
+================================================================================
 While condition with subshell
 ================================================================================
 

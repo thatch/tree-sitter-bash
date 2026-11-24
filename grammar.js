@@ -514,7 +514,7 @@ module.exports = grammar({
       )),
     ),
 
-    variable_assignments: $ => seq($.variable_assignment, repeat1($.variable_assignment)),
+    variable_assignments: $ => prec.dynamic(1, seq($.variable_assignment, repeat1($.variable_assignment))),
 
     subscript: $ => seq(
       field('name', $.variable_name),
