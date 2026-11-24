@@ -390,6 +390,7 @@ module.exports = grammar({
       seq(
         '{',
         optional($._terminated_statement),
+        optional($._statement_not_subshell),
         token(prec(-1, '}')),
       ),
       seq(

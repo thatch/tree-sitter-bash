@@ -1862,6 +1862,53 @@ if (echo $BASHPID; true); then echo $BASHPID; fi
         (variable_name)))))
 
 ================================================================================
+If condition with compound statement (unterminated body)
+================================================================================
+
+if { { cmd }; }; then echo ok; fi
+
+--------------------------------------------------------------------------------
+
+(program
+  (if_statement
+    (compound_statement
+      (compound_statement
+        (command
+          (command_name
+            (word)))))
+    (command
+      (command_name
+        (word))
+      (word))))
+
+================================================================================
+If condition with compound statement containing redirect and multiline body
+================================================================================
+
+if { { true; } >&5
+  true; }; then :
+  fi
+
+--------------------------------------------------------------------------------
+
+(program
+  (if_statement
+    (compound_statement
+      (redirected_statement
+        (compound_statement
+          (command
+            (command_name
+              (word))))
+        (file_redirect
+          (number)))
+      (command
+        (command_name
+          (word))))
+    (command
+      (command_name
+        (word)))))
+
+================================================================================
 Multiple variable assignments as command prefix (same line)
 ================================================================================
 

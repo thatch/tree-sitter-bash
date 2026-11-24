@@ -1911,6 +1911,18 @@
               ]
             },
             {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_statement_not_subshell"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
               "type": "TOKEN",
               "content": {
                 "type": "PREC",
